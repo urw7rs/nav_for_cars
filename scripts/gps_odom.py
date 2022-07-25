@@ -24,8 +24,28 @@ class GpsOdom:
         self.pub = rospy.Publisher("/odom", Odometry, queue_size=10)
         self.broadcaster = tf.TransformBroadcaster()
 
+        self.x0 = None
+        self.y0 = None
+
     def publish_odom(self, msg):
         x, y = self.to_utm(msg.longitude, msg.latitude)
+
+        if self.x0 is None or self.y0 is None:
+            self.x0 = x
+            self.y0 = y
+
+        self.broadcaster.sendTransform(
+            (self.x0, self.y0, 0),
+            tf.transformations.quaternion_from_euler(
+                0, 0, math.atan2(self.x0, self.y0)
+            ),
+            rospy.Time.now(),
+            "odom",
+            "map",
+        )
+
+        x -= self.x0
+        y -= self.y0
 
         # skip if previous x, y values are unavailable
         if self.prev_ready is False:
@@ -45,22 +65,23 @@ class GpsOdom:
 
         current_time = rospy.Time.now()
 
-        odom_quat = tf.transformations.quaternion_from_euler(0, 0, yaw)
-
+        quat = quaternion_from_euler(0.0, 0.0, yaw)
         self.broadcaster.sendTransform(
-            (x, y, 0.0), odom_quat, current_time, "odom", "map"
+            (x, y, 0),
+            quat,
+            rospy.Time.now(),
+            "base_link",
+            "odom",
         )
 
         msg = Odometry()
 
-        msg.child_frame_id = "odom"
+        msg.child_frame_id = "base_link"
         msg.header.stamp = current_time
-        msg.header.frame_id = "map"
+        msg.header.frame_id = "odom"
 
         msg.pose.pose.position.x = x
         msg.pose.pose.position.y = y
-
-        quat = quaternion_from_euler(0.0, 0.0, yaw)
 
         msg.pose.pose.orientation.x = quat[0]
         msg.pose.pose.orientation.y = quat[1]
@@ -69,16 +90,8 @@ class GpsOdom:
 
         self.pub.publish(msg)
 
-        self.broadcaster.sendTransform(
-            (x, y, 0),
-            quat,
-            rospy.Time.now(),
-            "odom",
-            "map",
-        )
-
 
 if __name__ == "__main__":
-    rospy.init_node("gps_odom")
+    rospy.init_node("gps_pose")
     node = GpsOdom()
     rospy.spin()

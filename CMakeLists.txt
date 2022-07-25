@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(car_nav)
+project(nav_for_cars)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -102,7 +102,7 @@ catkin_python_setup()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES car_nav
+#  LIBRARIES nav_for_cars
 #  CATKIN_DEPENDS rospy
 #  DEPENDS system_lib
 )
@@ -120,7 +120,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/car_nav.cpp
+#   src/${PROJECT_NAME}/nav_for_cars.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -131,7 +131,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/car_nav_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/nav_for_cars_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -195,7 +195,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_car_nav.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_nav_for_cars.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
