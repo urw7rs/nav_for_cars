@@ -1,0 +1,8 @@
+<launch>
+	<!-- args = "(경로가 생성되는 폴더 이름) (생성할 경로의 파일 이름)" -->
+	<node pkg="erp_ros" type="path_maker_track.py" name="maker" args="path path_name" output="screen"/>
+	<node pkg="erp_ros" type="pure_pursuit_track.py" name="pure_pursuit" args="path_name" output="screen"/>
+
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find erp_ros)/rviz/track.rviz" />
+ 
+</launch>

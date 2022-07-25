@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <arg name="path_file_name" /> 
+  <arg name="path_file_dir" default="$(find car_nav)/path" /> 
+
+  <node pkg="car_nav" type="follow_path.py" name="follow_path" output="screen" />
+
+  <node pkg="car_nav" type="load_path.py" name="load_path" output="screen" >
+      <param name="path" value="$(arg path_file_dir)/$(arg path_file_name).txt" />
+  </node>
+
+</launch>

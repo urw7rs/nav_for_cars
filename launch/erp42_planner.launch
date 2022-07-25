@@ -1,0 +1,9 @@
+<launch>
+        <!-- args = "(추종할 경로 이름) (신호등 greenlight setting (True,False))" -->
+	<node pkg="erp_ros" type="erp42_planner.py" name="planner" args="4_Kcity_delivery_total_path True" output="screen" />
+        <node pkg="erp_ros" type="erp42_control.py" name="control" />
+        <node pkg="erp_ros" type="erp42_status.py" name="status" />
+
+        <node pkg="rviz" type="rviz" name="rviz" args="-d $(find erp_ros)/rviz/planner.rviz" />
+
+</launch>
