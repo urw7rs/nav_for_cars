@@ -34,9 +34,10 @@ if __name__ == "__main__":
 
         pose = PoseStamped()
 
+        pose.header.frame_id = "map"
+
         pose.pose.position.x = x
         pose.pose.position.y = y
-
         pose.pose.orientation.w = 1
 
         path.poses.append(pose)

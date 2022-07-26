@@ -5,6 +5,7 @@ import numpy as np
 import threading
 
 import rospy
+import tf
 
 from nav_msgs.msg import Path, Odometry
 from ackermann_msgs.msg import AckermannDrive
@@ -46,16 +47,27 @@ class PathTracker:
 
         self.pub = rospy.Publisher("/ackermann_cmd", AckermannDrive, queue_size=10)
 
+        self.listener = tf.TransformListener()
+        self.listener.waitForTransform(
+            "/odom",
+            "/map",
+            rospy.Time(0),
+            rospy.Duration(5),
+        )
+
     def load_path(self, msg):
         """Load local path
 
         Args:
             msg (Path): nav_msgs/Path message containg local path
         """
-
         path = []
 
         for pose in msg.poses:
+            pose.header.frame_id = "map"
+
+            pose = self.listener.transformPose("odom", pose)
+
             x = pose.pose.position.x
             y = pose.pose.position.y
 
@@ -130,7 +142,7 @@ class PathTracker:
 
             msg = AckermannDrive()
             msg.speed = self.target_speed
-            msg.steering_angle = np.deg2rad(angle)
+            msg.steering_angle = angle
 
             self.pub.publish(msg)
 
@@ -138,7 +150,7 @@ class PathTracker:
 if __name__ == "__main__":
     rospy.init_node("follow_path")
 
-    target_speed = rospy.get_param("~speed", 10 / 3.6)
+    target_speed = rospy.get_param("~speed", 5 / 3.6)
     steer_gain = rospy.get_param("~steer_gain", 0.1)
     speed_gain = rospy.get_param("~speed_gain", 1.0)
     wheel_base = rospy.get_param("~wheel_base", 1.6)
