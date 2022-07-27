@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from path_tracking.frenet_optimal_planning import frenet_optimal_planning
+from nav_for_cars.frenet_optimal_planning import frenet_optimal_planning
 
 import rospy
 

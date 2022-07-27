@@ -10,7 +10,7 @@ import tf
 from nav_msgs.msg import Path, Odometry
 from ackermann_msgs.msg import AckermannDrive
 
-from path_tracking.stanley_controller import StanleyController, State
+from nav_for_cars.stanley_controller import StanleyController, State
 
 
 class PathTracker:
