@@ -68,7 +68,7 @@ class GpsOdom:
 
         quat = quaternion_from_euler(0.0, 0.0, yaw)
         self.broadcaster.sendTransform(
-            (x, y, 0.18),
+            (x, y, 0.26),
             quat,
             rospy.Time.now(),
             "odom",
