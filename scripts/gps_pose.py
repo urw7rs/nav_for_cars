@@ -22,6 +22,7 @@ class GpsOdom:
         )
 
         self.pub = rospy.Publisher("/odom", Odometry, queue_size=10)
+
         self.broadcaster = tf.TransformBroadcaster()
 
         self.x0 = None
@@ -40,8 +41,8 @@ class GpsOdom:
                 0, 0, math.atan2(self.x0, self.y0)
             ),
             rospy.Time.now(),
-            "odom",
             "map",
+            "utm",
         )
 
         x -= self.x0
@@ -67,18 +68,18 @@ class GpsOdom:
 
         quat = quaternion_from_euler(0.0, 0.0, yaw)
         self.broadcaster.sendTransform(
-            (x, y, 0),
+            (x, y, 0.26),
             quat,
             rospy.Time.now(),
-            "base_link",
             "odom",
+            "map",
         )
 
         msg = Odometry()
 
-        msg.child_frame_id = "base_link"
+        msg.child_frame_id = "odom"
         msg.header.stamp = current_time
-        msg.header.frame_id = "odom"
+        msg.header.frame_id = "map"
 
         msg.pose.pose.position.x = x
         msg.pose.pose.position.y = y
